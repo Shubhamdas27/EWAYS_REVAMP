@@ -35,6 +35,7 @@ const Career: React.FC = () => {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [resume, setResume] = useState<File | null>(null);
 
   const positions = [
     'Software Developer',
@@ -107,33 +108,71 @@ const Career: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (validateForm()) {
       setIsSubmitting(true);
 
-      // Simulate form submission
-      setTimeout(() => {
-        setIsSubmitting(false);
-        setSubmitSuccess(true);
-        setFormData({
-          fullName: '',
-          email: '',
-          phone: '',
-          position: '',
-          jobType: 'fulltime',
-          experience: '',
-          education: '',
-          skills: '',
-          portfolio: '',
-          coverLetter: '',
+      try {
+        // Create FormData for file upload
+        const submitData = new FormData();
+        
+        // Add all form fields
+        submitData.append('fullName', formData.fullName);
+        submitData.append('email', formData.email);
+        submitData.append('phone', formData.phone);
+        submitData.append('position', formData.position);
+        submitData.append('jobType', formData.jobType);
+        submitData.append('experience', formData.experience);
+        submitData.append('education', formData.education);
+        submitData.append('skills', formData.skills);
+        submitData.append('portfolio', formData.portfolio);
+        submitData.append('coverLetter', formData.coverLetter);
+        
+        // Add resume file if exists
+        if (resume) {
+          submitData.append('resume', resume);
+        }
+
+        // Send to backend API
+        const response = await fetch('http://localhost:5000/api/contact', {
+          method: 'POST',
+          body: submitData // FormData automatically sets correct Content-Type
         });
 
-        setTimeout(() => {
-          setSubmitSuccess(false);
-        }, 5000);
-      }, 1500);
+        const result = await response.json();
+        
+        if (result.success) {
+          setSubmitSuccess(true);
+          setFormData({
+            fullName: '',
+            email: '',
+            phone: '',
+            position: '',
+            jobType: 'fulltime',
+            experience: '',
+            education: '',
+            skills: '',
+            portfolio: '',
+            coverLetter: '',
+          });
+          setResume(null);
+          
+          alert('✅ Application submitted successfully! We will review your application and get back to you soon.');
+
+          setTimeout(() => {
+            setSubmitSuccess(false);
+          }, 5000);
+        } else {
+          alert('❌ Failed to submit application: ' + (result.message || 'Unknown error'));
+        }
+      } catch (error) {
+        console.error('Career form error:', error);
+        alert('❌ Network error: Please check if backend server is running');
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -210,7 +249,7 @@ const Career: React.FC = () => {
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#0056b3] ${
                     errors.fullName ? 'border-red-500' : 'border-gray-300'
                   }`}
-                  placeholder="John Doe"
+                  placeholder="Shubham Sharma"
                 />
                 {errors.fullName && <p className="mt-1 text-sm text-red-500">{errors.fullName}</p>}
               </div>
@@ -246,7 +285,7 @@ const Career: React.FC = () => {
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#0056b3] ${
                     errors.phone ? 'border-red-500' : 'border-gray-300'
                   }`}
-                  placeholder="+91 98765 43210"
+                  placeholder="9123456780"
                 />
                 {errors.phone && <p className="mt-1 text-sm text-red-500">{errors.phone}</p>}
               </div>
@@ -372,6 +411,35 @@ const Career: React.FC = () => {
                 placeholder="List your technical skills, tools, and technologies you're proficient in"
               ></textarea>
               {errors.skills && <p className="mt-1 text-sm text-red-500">{errors.skills}</p>}
+            </div>
+
+            {/* Resume Upload */}
+            <div>
+              <label htmlFor="resume" className="block text-sm font-medium text-gray-700 mb-1">
+                Resume/CV <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <input
+                  type="file"
+                  id="resume"
+                  accept=".pdf,.doc,.docx"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setResume(file);
+                    }
+                  }}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0056b3]"
+                />
+                <div className="mt-1 text-xs text-gray-500">
+                  Upload your resume in PDF, DOC, or DOCX format (max 5MB)
+                </div>
+                {resume && (
+                  <div className="mt-2 text-sm text-green-600">
+                    ✅ {resume.name} selected
+                  </div>
+                )}
+              </div>
             </div>
 
             <div>

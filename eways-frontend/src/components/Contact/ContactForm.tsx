@@ -77,31 +77,52 @@ const ContactForm: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (validateForm()) {
       setIsSubmitting(true);
       
-      // Simulate form submission
-      setTimeout(() => {
-        setIsSubmitting(false);
-        setSubmitSuccess(true);
-        
-        // Reset form after successful submission
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          subject: '',
-          message: '',
+      try {
+        // Send to backend API
+        const response = await fetch('http://localhost:5000/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
         });
+
+        const result = await response.json();
         
-        // Reset success message after 5 seconds
-        setTimeout(() => {
-          setSubmitSuccess(false);
-        }, 5000);
-      }, 1500);
+        if (result.success) {
+          setSubmitSuccess(true);
+          
+          // Reset form after successful submission
+          setFormData({
+            name: '',
+            email: '',
+            phone: '',
+            subject: '',
+            message: '',
+          });
+          
+          // Show success message
+          alert('✅ Message sent successfully! We will get back to you soon.');
+          
+          // Reset success message after 5 seconds
+          setTimeout(() => {
+            setSubmitSuccess(false);
+          }, 5000);
+        } else {
+          alert('❌ Failed to send message: ' + (result.message || 'Unknown error'));
+        }
+      } catch (error) {
+        console.error('Contact form error:', error);
+        alert('❌ Network error: Please check if backend server is running');
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
   
@@ -130,7 +151,7 @@ const ContactForm: React.FC = () => {
               className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#0056b3] ${
                 errors.name ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="John Doe"
+              placeholder="Shubham Sharma"
             />
             {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
           </div>
@@ -148,7 +169,7 @@ const ContactForm: React.FC = () => {
               className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#0056b3] ${
                 errors.email ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="john@example.com"
+              placeholder="Yourname@gmail.com"
             />
             {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
           </div>
@@ -168,7 +189,7 @@ const ContactForm: React.FC = () => {
               className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#0056b3] ${
                 errors.phone ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="+1 234 567 8900"
+              placeholder="9123456780"
             />
             {errors.phone && <p className="mt-1 text-sm text-red-500">{errors.phone}</p>}
           </div>

@@ -14,7 +14,7 @@ const Contact: React.FC = () => {
       id: 2,
       icon: <Phone size={20} className="text-[#0056b3]" />,
       title: 'Call Us',
-      details: '+91 98765 43210',
+      details: '9123456780',
     },
     {
       id: 3,
