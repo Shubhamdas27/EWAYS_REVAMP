@@ -155,3 +155,122 @@
 .loading-spinner {
   @apply inline-block w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin;
 }
+
+/* Wave divider for hero section */
+.wave-divider {
+  clip-path: polygon(0 100%, 100% 100%, 100% 0);
+}
+
+/* Enhanced gradient backgrounds */
+.gradient-bg-primary {
+  background: linear-gradient(135deg, #0056b3 0%, #37b6ff 100%);
+}
+
+.gradient-bg-secondary {
+  background: linear-gradient(135deg, #ff7e2b 0%, #ffa726 100%);
+}
+
+/* Glass morphism effects */
+.glass {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.glass-dark {
+  background: rgba(0, 86, 179, 0.1);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(0, 86, 179, 0.2);
+}
+
+/* Advanced hover effects */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 50px -12px rgba(0, 86, 179, 0.25);
+}
+
+/* Staggered animations */
+.stagger-animation > * {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: staggerFadeIn 0.6s ease-out forwards;
+}
+
+.stagger-animation > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-animation > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-animation > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-animation > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-animation > *:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes staggerFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Floating animation */
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Pulse animation for elements */
+.pulse-soft {
+  animation: pulseSoft 2s infinite;
+}
+
+@keyframes pulseSoft {
+  0%, 100% { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+  50% { 
+    opacity: 0.8; 
+    transform: scale(1.05); 
+  }
+}
+
+/* Enhanced button animations */
+.btn-animated {
+  position: relative;
+  overflow: hidden;
+  transform: perspective(1px) translateZ(0);
+}
+
+.btn-animated::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-animated:hover::before {
+  left: 100%;
+}
+
+/* Parallax elements */
+.parallax-element {
+  will-change: transform;
+}
+
+/* Responsive animations */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

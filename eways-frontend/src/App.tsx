@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import { gsap } from 'gsap';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Header from './components/Header/Header';
 import Hero from './components/Hero/Hero';
 import Services from './components/Services/Services';
@@ -9,6 +12,8 @@ import Career from './components/Career/Career';
 import Contact from './components/Contact/Contact';
 import Footer from './components/Footer/Footer';
 
+gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
+
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -17,14 +22,64 @@ function App() {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // Simulate loading and add smooth scroll behavior
+  // Initialize GSAP and smooth scroll behavior
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1000);
+    // Loading animation
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+      
+      // Page entrance animation
+      gsap.fromTo("main", 
+        { opacity: 0 }, 
+        { opacity: 1, duration: 0.8, ease: "power2.out" }
+      );
+    }, 1000);
     
-    // Enhanced smooth scrolling for anchor links
-    document.documentElement.style.scrollBehavior = 'smooth';
+    // Global smooth scroll setup
+    gsap.set("html", { scrollBehavior: "auto" });
     
-    return () => clearTimeout(timer);
+    // Create custom smooth scroll for navigation links
+    const navLinks = document.querySelectorAll('a[href^="#"]');
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href') || '');
+        if (target) {
+          gsap.to(window, {
+            duration: 1.5,
+            scrollTo: { y: target, offsetY: 80 },
+            ease: "power3.inOut"
+          });
+        }
+      });
+    });
+
+    // Parallax background elements
+    gsap.utils.toArray('.parallax-bg').forEach((element: any) => {
+      gsap.fromTo(element, 
+        { yPercent: -50 },
+        {
+          yPercent: 50,
+          ease: "none",
+          scrollTrigger: {
+            trigger: element,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1
+          }
+        }
+      );
+    });
+
+    // Refresh ScrollTrigger on resize
+    const handleResize = () => ScrollTrigger.refresh();
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', handleResize);
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
   }, []);
 
   // Close menu when clicking outside

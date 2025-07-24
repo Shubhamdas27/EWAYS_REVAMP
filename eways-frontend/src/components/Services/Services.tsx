@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import ServiceCard from './ServiceCard';
 import { 
   FileCode, Users, GraduationCap, DollarSign, 
   Code, Link, Building
 } from 'lucide-react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Services: React.FC = () => {
+  const servicesRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement[]>([]);
+
   const services = [
     {
       id: 1,
@@ -51,22 +59,120 @@ const Services: React.FC = () => {
     }
   ];
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Title animation
+      gsap.fromTo(titleRef.current?.children || [],
+        {
+          y: 100,
+          opacity: 0
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          stagger: 0.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: titleRef.current,
+            start: "top 80%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+
+      // Cards staggered animation
+      cardsRef.current.forEach((card, index) => {
+        if (card) {
+          gsap.fromTo(card,
+            {
+              y: 150,
+              opacity: 0,
+              scale: 0.8,
+              rotation: -5
+            },
+            {
+              y: 0,
+              opacity: 1,
+              scale: 1,
+              rotation: 0,
+              duration: 1.2,
+              delay: index * 0.15,
+              ease: "back.out(1.7)",
+              scrollTrigger: {
+                trigger: card,
+                start: "top 90%",
+                toggleActions: "play none none reverse"
+              }
+            }
+          );
+        }
+      });
+
+      // Background elements animation
+      const bgElements = servicesRef.current?.querySelectorAll('.bg-element');
+      bgElements?.forEach((el, index) => {
+        gsap.fromTo(el,
+          {
+            scale: 0,
+            rotation: 0
+          },
+          {
+            scale: 1,
+            rotation: index % 2 === 0 ? 360 : -360,
+            duration: 2,
+            delay: 0.5,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: servicesRef.current,
+              start: "top 70%",
+              toggleActions: "play none none reverse"
+            }
+          }
+        );
+
+        // Continuous floating animation
+        gsap.to(el, {
+          y: index % 2 === 0 ? -30 : 30,
+          rotation: index % 2 === 0 ? 10 : -10,
+          duration: 4 + index,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+          delay: index * 0.5
+        });
+      });
+
+    }, servicesRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="services" className="section-padding bg-white">
-      <div className="container-custom">
-        <div className="text-center mb-16">
-          <h2 className="section-title">Our Services</h2>
-          <p className="section-subtitle">Comprehensive IT solutions tailored to your business needs</p>
+    <section ref={servicesRef} id="services" className="section-padding bg-gradient-to-br from-white via-blue-50/20 to-gray-50 relative overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="bg-element absolute top-20 left-10 w-40 h-40 bg-gradient-to-br from-[#0056b3]/5 to-transparent rounded-full blur-2xl"></div>
+      <div className="bg-element absolute bottom-20 right-10 w-32 h-32 bg-gradient-to-br from-[#ff7e2b]/5 to-transparent rounded-full blur-2xl"></div>
+      <div className="bg-element absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-[#37b6ff]/3 to-transparent rounded-full blur-3xl"></div>
+      
+      <div className="container-custom relative z-10">
+        <div ref={titleRef} className="text-center mb-16 space-y-4">
+          <h2 className="section-title bg-gradient-to-r from-[#0056b3] to-[#37b6ff] bg-clip-text text-transparent">Our Services</h2>
+          <p className="section-subtitle text-gray-600 max-w-2xl mx-auto">Comprehensive IT solutions tailored to your business needs with cutting-edge technology and expert implementation</p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service) => (
-            <ServiceCard 
+          {services.map((service, index) => (
+            <div
               key={service.id}
-              title={service.title}
-              description={service.description}
-              icon={service.icon}
-            />
+              ref={(el) => el && (cardsRef.current[index] = el)}
+            >
+              <ServiceCard 
+                title={service.title}
+                description={service.description}
+                icon={service.icon}
+              />
+            </div>
           ))}
         </div>
       </div>
