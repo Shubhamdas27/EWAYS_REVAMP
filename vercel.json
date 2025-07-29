@@ -16,14 +16,10 @@
       }
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/eways-backend/server.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/eways-frontend/dist/$1"
+      "source": "/api/(.*)",
+      "destination": "/eways-backend/server.js"
     }
   ],
   "env": {
