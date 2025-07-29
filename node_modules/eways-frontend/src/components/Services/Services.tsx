@@ -52,24 +52,26 @@ const Services: React.FC = () => {
   ];
 
   return (
-    <section id="services" className="section-padding bg-gradient-to-br from-[#faf5f0] via-white to-[#faf5f0] relative overflow-hidden">
+    <section id="services" className="py-16 md:py-24 bg-gradient-to-br from-[#faf5f0] via-white to-[#faf5f0] relative overflow-hidden min-h-screen">
       {/* Royal decorative elements */}
       <div className="absolute top-10 left-10 w-32 h-32 bg-gradient-to-br from-[#d4af37]/20 to-[#553c9a]/20 rounded-full blur-3xl"></div>
       <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-br from-[#553c9a]/20 to-[#1e2a4a]/20 rounded-full blur-3xl"></div>
       
-      <div className="container-custom relative z-10">
-        <div className="text-center mb-16 animate-on-scroll">
-          <h2 className="section-title royal-heading">Our Royal Services</h2>
-          <p className="section-subtitle max-w-3xl mx-auto">
+      <div className="container mx-auto px-4 md:px-8 relative z-10">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 playfair-font bg-gradient-to-r from-[#1a365d] via-[#553c9a] to-[#d4af37] bg-clip-text text-transparent">
+            Our Royal Services
+          </h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
             Comprehensive IT solutions designed to accelerate your business growth and digital transformation journey with royal excellence.
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 opacity-100 visible">
           {services.map((service) => (
             <div
               key={service.id}
-              className="group transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 animate-on-scroll stagger-item"
+              className="service-card-visible transform transition-all duration-300 hover:scale-105"
             >
               <ServiceCard
                 title={service.title}

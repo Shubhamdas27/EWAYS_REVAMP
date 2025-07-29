@@ -81,24 +81,24 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, icon }) =
   return (
     <div 
       ref={cardRef}
-      className="service-card group bg-white/95 backdrop-blur-sm border border-[#d4af37]/20 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden relative"
+      className="service-card-visible bg-white border-2 border-[#d4af37]/30 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden relative p-6 md:p-8 min-h-[320px]"
     >
       {/* Royal gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#1a365d]/5 via-[#553c9a]/3 to-[#d4af37]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-[#1a365d]/5 via-[#553c9a]/3 to-[#d4af37]/5 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
       
-      <div className="p-6 md:p-8 relative z-10">
+      <div className="relative z-10">
         <div 
           ref={iconRef}
-          className="mb-6 p-4 bg-gradient-to-br from-[#faf5f0] to-[#d4af37]/10 inline-block rounded-xl shadow-md border border-[#d4af37]/20"
+          className="mb-6 p-4 bg-gradient-to-br from-[#faf5f0] to-[#d4af37]/20 inline-block rounded-xl shadow-md border border-[#d4af37]/30"
         >
           {icon}
         </div>
         
         <div ref={contentRef} className="space-y-4">
-          <h3 className="text-xl font-bold mb-3 text-[#1e2a4a] group-hover:text-[#553c9a] transition-colors duration-300 playfair-font">
+          <h3 className="text-xl font-bold mb-3 text-[#1e2a4a] playfair-font">
             {title}
           </h3>
-          <p className="text-gray-600 mb-6 leading-relaxed">
+          <p className="text-gray-600 mb-6 leading-relaxed text-sm">
             {description}
           </p>
           <a 
@@ -115,7 +115,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, icon }) =
       </div>
       
       {/* Royal decorative corner element */}
-      <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-[#d4af37]/10 to-[#553c9a]/5 rounded-bl-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-[#d4af37]/20 to-[#553c9a]/10 rounded-bl-3xl opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
     </div>
   );
 };
