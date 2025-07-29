@@ -1,16 +1,21 @@
 {
+  "version": 2,
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "installCommand": "npm install",
+  "installCommand": "npm ci",
   "devCommand": "npm run dev",
+  "cleanUrls": true,
+  "trailingSlash": false,
   "functions": {
     "app/api/**/*.js": {
       "runtime": "nodejs18.x"
     }
   },
-  "env": {
-    "NODE_ENV": "production"
+  "build": {
+    "env": {
+      "NODE_ENV": "production"
+    }
   },
   "headers": [
     {
