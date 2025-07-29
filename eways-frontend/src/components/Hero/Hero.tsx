@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { smoothScrollTo } from '../../utils/smoothScroll';
 
 gsap.registerPlugin(ScrollTrigger);
 
