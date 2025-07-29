@@ -47,6 +47,18 @@
 }
 
 @layer components {
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    transform-origin: 0%;
+    z-index: 50;
+    transition: transform 0.1s ease-out;
+  }
+
   .btn {
     @apply px-6 py-3 rounded-md font-medium transition-all duration-500 inline-block transform hover:scale-105;
   }
