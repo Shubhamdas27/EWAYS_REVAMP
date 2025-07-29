@@ -5,7 +5,7 @@
       "src": "eways-frontend/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "eways-frontend/dist"
+        "distDir": "dist"
       }
     },
     {
@@ -20,6 +20,10 @@
     {
       "source": "/api/(.*)",
       "destination": "/eways-backend/server.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ],
   "env": {
