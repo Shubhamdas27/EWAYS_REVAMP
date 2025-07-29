@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import Logo from '../common/Logo';
-import { smoothScrollTo } from '../../utils/smoothScroll';
 
 interface HeaderProps {
   isMenuOpen: boolean;
@@ -10,16 +9,18 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY > 50;
       setIsScrolled(scrolled);
       
-      // Update scroll progress
-      const progress = Math.min(window.scrollY / (document.documentElement.scrollHeight - window.innerHeight), 1);
-      setScrollProgress(progress);
+      // Update scroll progress safely
+      const scrollProgress = Math.min(window.scrollY / (document.body.scrollHeight - window.innerHeight), 1);
+      const progressBar = document.querySelector('.scroll-progress') as HTMLElement;
+      if (progressBar) {
+        progressBar.style.transform = `scaleX(${scrollProgress})`;
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -31,38 +32,22 @@ const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
     return () => { document.body.style.overflow = 'auto'; };
   }, [isMenuOpen]);
 
-  // Enhanced smooth scroll to section
+  // Simple smooth scroll to section
   const scrollToSection = (href: string) => {
-    console.log('Attempting to scroll to:', href);
-    const elementId = href.substring(1);
-    const element = document.getElementById(elementId);
-    
+    const element = document.querySelector(href);
     if (element) {
-      console.log('Element found, scrolling...');
-      // Use GSAP for smooth scroll
-      smoothScrollTo(element, 80);
-    } else {
-      console.warn('Element not found:', elementId);
-      // Fallback to native scroll
-      const targetElement = document.querySelector(href);
-      if (targetElement) {
-        targetElement.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'start' 
-        });
-      }
+      element.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start'
+      });
     }
-    
     if (isMenuOpen) toggleMenu();
   };
 
   return (
     <>
       {/* Scroll progress indicator */}
-      <div 
-        className={`scroll-progress transition-transform duration-300`}
-        style={{transform: `scaleX(${scrollProgress})`}}
-      ></div>
+      <div className="scroll-progress fixed top-0 left-0 w-full h-1 bg-gradient-to-r from-[#0056b3] to-[#37b6ff] z-50 origin-left scale-x-0"></div>
       
       <header 
         className={`fixed w-full z-40 transition-all duration-500 ${

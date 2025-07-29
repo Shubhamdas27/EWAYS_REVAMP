@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Upload, Briefcase, GraduationCap } from 'lucide-react';
+import { API_ENDPOINTS } from '../../utils/api';
 
 interface FormData {
   fullName: string;
@@ -136,7 +137,7 @@ const Career: React.FC = () => {
         }
 
         // Send to backend API
-        const response = await fetch('http://localhost:5000/api/contact', {
+        const response = await fetch(API_ENDPOINTS.CONTACT, {
           method: 'POST',
           body: submitData // FormData automatically sets correct Content-Type
         });
@@ -267,7 +268,7 @@ const Career: React.FC = () => {
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#0056b3] ${
                     errors.email ? 'border-red-500' : 'border-gray-300'
                   }`}
-                  placeholder="john@example.com"
+                  placeholder="YourName@gmail.com"
                 />
                 {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
               </div>

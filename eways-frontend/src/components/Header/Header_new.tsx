@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Menu, X, ChevronRight } from 'lucide-react';
 import Logo from '../common/Logo';
-import { smoothScrollTo } from '../../utils/smoothScroll';
+import { gsap } from 'gsap';
 
 interface HeaderProps {
   isMenuOpen: boolean;
@@ -10,7 +10,8 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const headerRef = useRef<HTMLElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,8 +19,11 @@ const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
       setIsScrolled(scrolled);
       
       // Update scroll progress
-      const progress = Math.min(window.scrollY / (document.documentElement.scrollHeight - window.innerHeight), 1);
-      setScrollProgress(progress);
+      const scrollProgress = Math.min(window.scrollY / (document.body.scrollHeight - window.innerHeight), 1);
+      const progressBar = document.querySelector('.scroll-progress') as HTMLElement;
+      if (progressBar) {
+        gsap.set(progressBar, { scaleX: scrollProgress });
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -31,40 +35,45 @@ const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
     return () => { document.body.style.overflow = 'auto'; };
   }, [isMenuOpen]);
 
+  useEffect(() => {
+    // Header entrance animation
+    if (headerRef.current) {
+      gsap.fromTo(headerRef.current, 
+        { y: -100, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, ease: "power3.out", delay: 0.2 }
+      );
+    }
+
+    // Navigation items animation
+    if (navRef.current) {
+      const navItems = navRef.current.querySelectorAll('.nav-item');
+      gsap.fromTo(navItems,
+        { y: -20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "power2.out", delay: 0.8 }
+      );
+    }
+  }, []);
+
   // Enhanced smooth scroll to section
   const scrollToSection = (href: string) => {
-    console.log('Attempting to scroll to:', href);
-    const elementId = href.substring(1);
-    const element = document.getElementById(elementId);
-    
+    const element = document.querySelector(href);
     if (element) {
-      console.log('Element found, scrolling...');
-      // Use GSAP for smooth scroll
-      smoothScrollTo(element, 80);
-    } else {
-      console.warn('Element not found:', elementId);
-      // Fallback to native scroll
-      const targetElement = document.querySelector(href);
-      if (targetElement) {
-        targetElement.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'start' 
-        });
-      }
+      gsap.to(window, {
+        duration: 1.5,
+        scrollTo: { y: element, offsetY: 80 },
+        ease: "power3.inOut"
+      });
     }
-    
     if (isMenuOpen) toggleMenu();
   };
 
   return (
     <>
       {/* Scroll progress indicator */}
-      <div 
-        className={`scroll-progress transition-transform duration-300`}
-        style={{transform: `scaleX(${scrollProgress})`}}
-      ></div>
+      <div className="scroll-progress fixed top-0 left-0 w-full h-1 bg-gradient-to-r from-[#0056b3] to-[#37b6ff] z-50 origin-left scale-x-0"></div>
       
       <header 
+        ref={headerRef}
         className={`fixed w-full z-40 transition-all duration-500 ${
           isScrolled 
             ? 'bg-white/95 backdrop-blur-md shadow-lg py-3 border-b border-blue-100' 
@@ -75,7 +84,7 @@ const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
           <Logo />
           
           <button 
-            className="lg:hidden text-gray-800 focus:outline-none hover:scale-110 transition-transform" 
+            className="lg:hidden text-gray-800 focus:outline-none hover:scale-110 transition-transform magnetic" 
             onClick={toggleMenu}
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           >
@@ -83,7 +92,7 @@ const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
           </button>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex space-x-8">
+          <nav ref={navRef} className="hidden lg:flex space-x-8">
             {[
               { href: '#home', label: 'Home' },
               { href: '#about', label: 'About' },
@@ -94,7 +103,7 @@ const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
               <button
                 key={item.href}
                 onClick={() => scrollToSection(item.href)}
-                className="text-gray-700 hover:text-[#0056b3] transition-all duration-300 font-medium relative group"
+                className="nav-item text-gray-700 hover:text-[#0056b3] transition-all duration-300 font-medium relative group magnetic"
               >
                 {item.label}
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#0056b3] to-[#37b6ff] transition-all duration-300 group-hover:w-full"></span>
@@ -103,7 +112,7 @@ const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
           </nav>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Enhanced Mobile Menu */}
         <div className={`lg:hidden fixed inset-0 bg-white/95 backdrop-blur-lg transition-all duration-500 ${
           isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}>
@@ -114,11 +123,13 @@ const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
               { href: '#services', label: 'Services' },
               { href: '#career', label: 'Career' },
               { href: '#contact', label: 'Contact' }
-            ].map((item) => (
+            ].map((item, index) => (
               <button
                 key={item.href}
                 onClick={() => scrollToSection(item.href)}
-                className="text-2xl font-medium text-gray-700 hover:text-[#0056b3] transition-all duration-300"
+                className={`text-2xl font-medium text-gray-700 hover:text-[#0056b3] transition-all duration-300 transform ${
+                  isMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+                } delay-${index * 100}`}
               >
                 {item.label}
               </button>

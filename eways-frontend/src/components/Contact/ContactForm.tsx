@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Send } from 'lucide-react';
+import { API_ENDPOINTS } from '../../utils/api';
 
 interface FormData {
   name: string;
@@ -85,7 +86,7 @@ const ContactForm: React.FC = () => {
       
       try {
         // Send to backend API
-        const response = await fetch('http://localhost:5000/api/contact', {
+        const response = await fetch(API_ENDPOINTS.CONTACT, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

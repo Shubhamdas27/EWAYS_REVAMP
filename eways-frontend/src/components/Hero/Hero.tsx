@@ -18,14 +18,14 @@ const Hero: React.FC = () => {
       // Hero entrance animations
       const tl = gsap.timeline();
       
-      // Animate title words separately
+      // Animate title words separately - optimized
       if (titleRef.current) {
         const words = titleRef.current.querySelectorAll('.word');
         tl.from(words, {
           opacity: 0,
-          y: 100,
-          duration: 0.8,
-          stagger: 0.2,
+          y: 50, // Reduced from 100 to 50
+          duration: 0.5, // Reduced from 0.8 to 0.5
+          stagger: 0.1, // Reduced from 0.2 to 0.1
           ease: "power3.out"
         });
       }
@@ -33,20 +33,20 @@ const Hero: React.FC = () => {
       // Animate subtitle
       tl.from(subtitleRef.current, {
         opacity: 0,
-        y: 50,
-        duration: 0.8,
+        y: 30, // Reduced from 50 to 30
+        duration: 0.5, // Reduced from 0.8 to 0.5
         ease: "power2.out"
-      }, "-=0.4");
+      }, "-=0.3"); // Reduced overlap
 
-      // Animate buttons
+      // Animate buttons - faster
       if (buttonsRef.current) {
         tl.from(Array.from(buttonsRef.current.children), {
           opacity: 0,
-          y: 30,
-          duration: 0.6,
-          stagger: 0.2,
+          y: 20, // Reduced from 30 to 20
+          duration: 0.4, // Reduced from 0.6 to 0.4
+          stagger: 0.1, // Reduced from 0.2 to 0.1
           ease: "back.out(1.7)"
-        }, "-=0.4");
+        }, "-=0.3"); // Reduced overlap
       }
 
       // Animate image container

@@ -7,4 +7,21 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          gsap: ['gsap'],
+          react: ['react', 'react-dom'],
+          lucide: ['lucide-react']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000,
+    sourcemap: false
+  },
+  server: {
+    port: 3000,
+    host: true
+  }
 });

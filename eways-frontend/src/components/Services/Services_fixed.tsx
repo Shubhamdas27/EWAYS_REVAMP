@@ -52,9 +52,9 @@ const Services: React.FC = () => {
   ];
 
   return (
-    <section id="services" className="section-padding bg-gradient-to-br from-gray-50 to-blue-50 relative">
+    <section className="section-padding bg-gradient-to-br from-gray-50 to-blue-50 relative">
       <div className="container-custom">
-        <div className="text-center mb-16 animate-on-scroll">
+        <div className="text-center mb-16">
           <h2 className="section-title">Our Services</h2>
           <p className="section-subtitle max-w-3xl mx-auto">
             Comprehensive IT solutions designed to accelerate your business growth and digital transformation journey.
@@ -65,7 +65,7 @@ const Services: React.FC = () => {
           {services.map((service) => (
             <div
               key={service.id}
-              className="group transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 animate-on-scroll stagger-item"
+              className="group transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-2"
             >
               <ServiceCard
                 title={service.title}
