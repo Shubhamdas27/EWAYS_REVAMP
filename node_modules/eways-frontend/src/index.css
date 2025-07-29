@@ -60,6 +60,14 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+
+  .playfair-font {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+
+  .scroll-progress-indicator {
+    transform-origin: left;
+  }
 }
 
 @layer components {
@@ -143,6 +151,7 @@
   
   .card {
     background: rgba(255, 255, 255, 0.95);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(212, 175, 55, 0.2);
     border-radius: 16px;

@@ -153,7 +153,7 @@ const Hero: React.FC = () => {
       <div className="container-custom relative z-10">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
-            <h1 ref={titleRef} className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight" style={{fontFamily: 'Playfair Display, serif'}}>
+            <h1 ref={titleRef} className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight playfair-font">
               <span className="word block text-[#1e2a4a]">Royal IT Solutions</span>
               <span className="word block bg-gradient-to-r from-[#1a365d] via-[#553c9a] to-[#d4af37] bg-clip-text text-transparent">
                 That Crown Your Success

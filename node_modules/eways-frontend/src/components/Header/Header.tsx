@@ -96,8 +96,12 @@ const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
     <>
       {/* Scroll progress indicator */}
       <div 
-        className="scroll-progress"
-        style={{ transform: `scaleX(${scrollProgress})` }}
+        className="scroll-progress scroll-progress-indicator"
+        ref={(el) => {
+          if (el) {
+            el.style.transform = `scaleX(${scrollProgress})`;
+          }
+        }}
       />
       
       <header 
