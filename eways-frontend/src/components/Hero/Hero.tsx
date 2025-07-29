@@ -38,15 +38,32 @@ const Hero: React.FC = () => {
         ease: "power2.out"
       }, "-=0.3"); // Reduced overlap
 
-      // Animate buttons - faster
+      // Animate buttons - faster with proper reset
       if (buttonsRef.current) {
-        tl.from(Array.from(buttonsRef.current.children), {
+        const buttons = Array.from(buttonsRef.current.children);
+        
+        // Set initial state
+        gsap.set(buttons, {
           opacity: 0,
-          y: 20, // Reduced from 30 to 20
-          duration: 0.4, // Reduced from 0.6 to 0.4
-          stagger: 0.1, // Reduced from 0.2 to 0.1
-          ease: "back.out(1.7)"
-        }, "-=0.3"); // Reduced overlap
+          y: 20,
+          scale: 1,
+          clearProps: "transform" // Clear any existing transforms
+        });
+        
+        tl.to(buttons, {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          stagger: 0.1,
+          ease: "back.out(1.7)",
+          clearProps: "transform", // Clear transforms after animation
+          onComplete: () => {
+            // Ensure buttons are properly reset for CSS hover effects
+            gsap.set(buttons, {
+              clearProps: "all"
+            });
+          }
+        }, "-=0.3");
       }
 
       // Animate image container
@@ -165,7 +182,14 @@ const Hero: React.FC = () => {
             </p>
             <div ref={buttonsRef} className="flex flex-wrap gap-4">
               <button 
-                onClick={() => scrollToSection('#services')} 
+                onClick={() => {
+                  const servicesElement = document.querySelector('#services');
+                  if (servicesElement) {
+                    servicesElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  } else {
+                    window.location.href = '/services';
+                  }
+                }} 
                 className="btn btn-primary group relative overflow-hidden"
               >
                 <span className="relative z-10">Explore Royal Services</span>
@@ -173,7 +197,14 @@ const Hero: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-[#553c9a] to-[#1e2a4a] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
               </button>
               <button 
-                onClick={() => scrollToSection('#contact')} 
+                onClick={() => {
+                  const contactElement = document.querySelector('#contact');
+                  if (contactElement) {
+                    contactElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  } else {
+                    window.location.href = '/contact';
+                  }
+                }} 
                 className="btn btn-outline group relative overflow-hidden"
               >
                 <span className="relative z-10">Connect With Royalty</span>

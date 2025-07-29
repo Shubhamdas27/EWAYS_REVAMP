@@ -84,9 +84,16 @@
   }
 
   .btn {
-    @apply px-6 py-3 rounded-md font-medium transition-all duration-500 inline-block transform hover:scale-105;
+    @apply px-6 py-3 rounded-md font-medium inline-block;
     font-family: 'Playfair Display', serif;
     font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transform: translateY(0) scale(1);
+    will-change: transform, box-shadow;
+  }
+  
+  .btn:hover {
+    transform: translateY(-2px) scale(1.05);
   }
   
   .btn-primary {
@@ -110,6 +117,7 @@
   .btn-outline:hover {
     background: linear-gradient(135deg, var(--royal-navy) 0%, var(--royal-purple) 100%);
     color: white;
+    transform: translateY(-2px) scale(1.05);
   }
   
   .container-custom {
