@@ -5,10 +5,23 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
 
 export const smoothScrollTo = (target: string | Element, offset = 80) => {
+  let targetElement: Element | null = null;
+  
+  if (typeof target === 'string') {
+    targetElement = document.querySelector(target);
+  } else {
+    targetElement = target;
+  }
+  
+  if (!targetElement) {
+    console.warn('Target element not found for smooth scroll');
+    return;
+  }
+  
   gsap.to(window, {
-    duration: 1.5,
-    scrollTo: { y: target, offsetY: offset },
-    ease: "power3.inOut"
+    duration: 1.2,
+    scrollTo: { y: targetElement, offsetY: offset },
+    ease: "power2.inOut"
   });
 };
 

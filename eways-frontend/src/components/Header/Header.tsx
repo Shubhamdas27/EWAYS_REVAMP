@@ -12,6 +12,20 @@ const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
+  // Debug function to check if all sections exist
+  useEffect(() => {
+    const checkSections = () => {
+      const sections = ['home', 'about', 'services', 'career', 'contact'];
+      sections.forEach(sectionId => {
+        const element = document.getElementById(sectionId);
+        console.log(`Section ${sectionId}:`, element ? 'Found' : 'Missing');
+      });
+    };
+    
+    // Check sections after component mount
+    setTimeout(checkSections, 1000);
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY > 50;
@@ -31,36 +45,77 @@ const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
     return () => { document.body.style.overflow = 'auto'; };
   }, [isMenuOpen]);
 
-  // Enhanced smooth scroll to section
+  // Enhanced smooth scroll to section with multiple fallbacks
   const scrollToSection = (href: string) => {
     console.log('Attempting to scroll to:', href);
     const elementId = href.substring(1);
-    const element = document.getElementById(elementId);
     
-    if (element) {
-      console.log('Element found, scrolling...');
-      // Use GSAP for smooth scroll
-      smoothScrollTo(element, 80);
-    } else {
-      console.warn('Element not found:', elementId);
-      // Fallback to native scroll
-      const targetElement = document.querySelector(href);
-      if (targetElement) {
-        targetElement.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'start' 
-        });
-      }
+    // Close mobile menu first
+    if (isMenuOpen) {
+      toggleMenu();
     }
     
-    if (isMenuOpen) toggleMenu();
+    // Function to perform the actual scroll
+    const performScroll = () => {
+      const element = document.getElementById(elementId);
+      
+      if (element) {
+        console.log('Element found, scrolling...');
+        
+        // Method 1: Calculate position and use native scroll
+        const headerHeight = 80;
+        const elementPosition = element.offsetTop - headerHeight;
+        
+        // Use multiple scroll methods for reliability
+        try {
+          // Primary method: Native smooth scroll
+          window.scrollTo({
+            top: elementPosition,
+            behavior: 'smooth'
+          });
+          
+          // Backup method: GSAP scroll
+          setTimeout(() => {
+            smoothScrollTo(element, headerHeight);
+          }, 100);
+          
+        } catch (error) {
+          console.warn('Primary scroll methods failed, using fallback');
+          // Final fallback: scrollIntoView
+          element.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          });
+        }
+      } else {
+        console.warn('Element not found:', elementId);
+        
+        // Try alternative selectors
+        const targetElement = document.querySelector(href) || 
+                             document.querySelector(`[data-section="${elementId}"]`) ||
+                             document.querySelector(`section[id="${elementId}"]`);
+        
+        if (targetElement) {
+          targetElement.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          });
+        } else {
+          console.error('No element found for:', href);
+        }
+      }
+    };
+    
+    // Wait for menu to close if it was open, then scroll
+    const delay = isMenuOpen ? 350 : 0;
+    setTimeout(performScroll, delay);
   };
 
   return (
     <>
       {/* Scroll progress indicator */}
       <div 
-        className={`scroll-progress transition-transform duration-300`}
+        className="scroll-progress"
         style={{transform: `scaleX(${scrollProgress})`}}
       ></div>
       
