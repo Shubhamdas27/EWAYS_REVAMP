@@ -5,15 +5,13 @@
       "src": "eways-frontend/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "dist"
+        "distDir": "eways-frontend/dist",
+        "buildCommand": "cd eways-frontend && npm run build"
       }
     },
     {
       "src": "eways-backend/server.js",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": ["eways-backend/**"]
-      }
+      "use": "@vercel/node"
     }
   ],
   "rewrites": [
@@ -23,7 +21,7 @@
     },
     {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": "/eways-frontend/dist/$1"
     }
   ],
   "env": {
