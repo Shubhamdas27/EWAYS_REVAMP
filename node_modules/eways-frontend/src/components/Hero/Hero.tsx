@@ -129,55 +129,55 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section ref={heroRef} id="home" className="relative bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 pt-28 pb-20 md:pt-32 md:pb-28 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0056b3]/10 via-transparent to-[#ff7e2b]/5 z-0"></div>
+    <section ref={heroRef} id="home" className="relative bg-gradient-to-br from-[#faf5f0] via-white to-[#f7fafc] pt-28 pb-20 md:pt-32 md:pb-28 overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d]/10 via-transparent to-[#553c9a]/5 z-0"></div>
       
-      {/* Enhanced animated background elements */}
+      {/* Royal animated background elements */}
       <div 
         ref={(el) => el && (bgElementsRef.current[0] = el)}
-        className="absolute top-20 left-16 w-24 h-24 bg-gradient-to-br from-[#0056b3]/30 to-[#0056b3]/10 rounded-full blur-sm"
+        className="absolute top-20 left-16 w-32 h-32 bg-gradient-to-br from-[#d4af37]/30 to-[#553c9a]/20 rounded-full blur-2xl"
       ></div>
       <div 
         ref={(el) => el && (bgElementsRef.current[1] = el)}
-        className="absolute bottom-32 right-24 w-20 h-20 bg-gradient-to-br from-[#ff7e2b]/40 to-[#ff7e2b]/10 rounded-full blur-sm"
+        className="absolute bottom-32 right-24 w-24 h-24 bg-gradient-to-br from-[#1e2a4a]/40 to-[#1a365d]/20 rounded-full blur-xl"
       ></div>
       <div 
         ref={(el) => el && (bgElementsRef.current[2] = el)}
-        className="absolute top-40 right-16 w-16 h-16 bg-gradient-to-br from-[#37b6ff]/30 to-[#37b6ff]/10 rounded-full blur-sm"
+        className="absolute top-40 right-16 w-20 h-20 bg-gradient-to-br from-[#553c9a]/30 to-[#d4af37]/15 rounded-full blur-xl"
       ></div>
       <div 
         ref={(el) => el && (bgElementsRef.current[3] = el)}
-        className="absolute bottom-20 left-20 w-12 h-12 bg-gradient-to-br from-[#0056b3]/20 to-transparent rounded-full blur-sm"
+        className="absolute bottom-20 left-20 w-16 h-16 bg-gradient-to-br from-[#1a365d]/25 to-transparent rounded-full blur-lg"
       ></div>
       
       <div className="container-custom relative z-10">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
-            <h1 ref={titleRef} className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-              <span className="word block">IT Solutions</span>
-              <span className="word block text-[#0056b3] bg-gradient-to-r from-[#0056b3] to-[#37b6ff] bg-clip-text text-transparent">
-                That Drive Growth
+            <h1 ref={titleRef} className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight" style={{fontFamily: 'Playfair Display, serif'}}>
+              <span className="word block text-[#1e2a4a]">Royal IT Solutions</span>
+              <span className="word block bg-gradient-to-r from-[#1a365d] via-[#553c9a] to-[#d4af37] bg-clip-text text-transparent">
+                That Crown Your Success
               </span>
             </h1>
             <p ref={subtitleRef} className="text-lg text-gray-700 max-w-lg leading-relaxed">
-              Delivering innovative IT services and solutions to empower businesses of all sizes. 
-              From consultancy to implementation, we're your trusted technology partner.
+              Experience the royalty of premium IT services and solutions. We empower businesses with 
+              regal technology implementations and unparalleled excellence in every service.
             </p>
             <div ref={buttonsRef} className="flex flex-wrap gap-4">
               <button 
                 onClick={() => scrollToSection('#services')} 
                 className="btn btn-primary group relative overflow-hidden"
               >
-                <span className="relative z-10">Explore Services</span>
+                <span className="relative z-10">Explore Royal Services</span>
                 <ChevronRight size={18} className="inline ml-1 group-hover:translate-x-1 transition-transform relative z-10" />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#004494] to-[#0056b3] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#553c9a] to-[#1e2a4a] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
               </button>
               <button 
                 onClick={() => scrollToSection('#contact')} 
                 className="btn btn-outline group relative overflow-hidden"
               >
-                <span className="relative z-10">Contact Us</span>
-                <div className="absolute inset-0 bg-[#0056b3] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                <span className="relative z-10">Connect With Royalty</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#1a365d] to-[#553c9a] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
               </button>
             </div>
           </div>
