@@ -56,7 +56,10 @@ app.use(cors({
     'http://localhost:3000',
     'http://localhost:5173',
     'https://eways.in',
-    'https://www.eways.in'
+    'https://www.eways.in',
+    'https://eways-frontend-4jtjjiqfg-subhdas272004-gmailcoms-projects.vercel.app',
+    'https://eways-frontend-noyycwl49-subhdas272004-gmailcoms-projects.vercel.app',
+    /^https:\/\/eways-frontend-.*\.vercel\.app$/
   ],
   credentials: true
 }));
@@ -82,6 +85,23 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Serve uploaded files
 app.use('/uploads', express.static('public/uploads'));
+
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Eways Backend API is running',
+    version: '1.0.0',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      health: '/health',
+      contact: '/api/contact',
+      projects: '/api/projects',
+      admin: '/api/admin',
+      analytics: '/api/analytics'
+    }
+  });
+});
 
 // Health check
 app.get('/health', (req, res) => {
